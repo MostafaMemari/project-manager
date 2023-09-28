@@ -1,10 +1,22 @@
 ###register request
+Post http://localhost:3000/auth/register 
+content-type: application/json
 
-Post http://localhost:3000/auth/register/
 {
-  "username" : "",
-  "email" : "",
-  "mobile" : "",
-  "password" : "",
-  "confirm_password" : ""
+  "username" : "MostafaMemari",
+  "email" : "m.memari7@yahoo.com",
+  "mobile" : "09388366510",
+  "password" : "123456",
+  "confirm_password" : "123456"
+}
+
+###login request
+Post http://localhost:3000/auth/login 
+content-type: application/json
+Authorization: Bearer {{$dotenv TOKEN}}
+
+
+{
+  "username" : "MostafaMemari",
+  "password" : "123456"
 }
