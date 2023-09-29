@@ -15,7 +15,6 @@ Post http://localhost:3000/auth/login
 content-type: application/json
 Authorization: Bearer {{$dotenv TOKEN}}
 
-
 {
   "username" : "MostafaMemari",
   "password" : "123456"
