@@ -27,7 +27,7 @@ function createUploadPath() {
 
   const uploadPath = path.join(__dirname, "..", "..", "public", "upload", Year, Month, Day);
   fs.mkdirSync(uploadPath, { recursive: true });
-  return uploadPath;
+  return path.join("public", "upload", Year, Month, Day);
 }
 module.exports = {
   hashString,
