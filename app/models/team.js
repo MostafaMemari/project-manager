@@ -5,6 +5,7 @@ const teamSchema = new mongoose.Schema(
     description: { type: String },
     users: { type: [mongoose.Types.ObjectId], default: [] },
     owner: { type: mongoose.Types.ObjectId, required: true },
+    username: { type: String, required: true, unique: true },
   },
   {
     timestamps: true,

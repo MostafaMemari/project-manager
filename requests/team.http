@@ -1,0 +1,14 @@
+### create team
+Post http://localhost:3000/team/create
+Authorization: Bearer {{$dotenv TOKEN}}
+Content-Type: application/json
+
+{
+  "name" : "title of New Project",
+  "description" : "text ddddddddddddddssssddddddddddddddddddddddddssss",
+  "username" : "My Team"
+}
+### get All Teams
+GET  http://localhost:3000/team
+Authorization: Bearer {{$dotenv TOKEN}}
+Content-Type: application/json
