@@ -9,6 +9,18 @@ Content-Type: application/json
   "username" : "My Team"
 }
 ### get All Teams
-GET  http://localhost:3000/team
+GET  http://localhost:3000/team/list
+Authorization: Bearer {{$dotenv TOKEN}}
+Content-Type: application/json
+### get one team By ID
+GET  http://localhost:3000/team/651976db476da248338af316
+Authorization: Bearer {{$dotenv TOKEN}}
+Content-Type: application/json
+### get Myteam  
+GET  http://localhost:3000/team/me
+Authorization: Bearer {{$dotenv TOKEN}}
+Content-Type: application/json
+### delete team By ID
+GET  http://localhost:3000/team/remove/651976db476da248338af316
 Authorization: Bearer {{$dotenv TOKEN}}
 Content-Type: application/json

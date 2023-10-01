@@ -17,9 +17,11 @@ class TeamController {
         success: true,
         message: "ایجاد تیم با موفقیت انجام شد",
       });
-    } catch (error) {}
+    } catch (error) {
+      next(error);
+    }
   }
-  async getListOfTeams(req, res) {
+  async getListOfTeams(req, res, next) {
     try {
       const teams = await teamModel.find({});
       return res.status(200).json({
@@ -29,8 +31,49 @@ class TeamController {
       });
     } catch (error) {}
   }
+  async getTeamByID(req, res, next) {
+    try {
+      const teamID = req.params.id;
+      const team = await teamModel.findOne({ _id: teamID });
+      if (!team) throw { status: 404, message: "تیمی یافت نشد" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        team,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getMyTeams(req, res, next) {
+    try {
+      const userID = req.user._id;
+      const teams = await teamModel.find({
+        $or: [{ owner: userID }, { users: userID }],
+      });
+      return res.status(200).json({ status: 200, success: true, teams });
+    } catch (error) {
+      next(error);
+    }
+  }
   inviteUserToTeam() {}
-  removeTeamById() {}
+  async removeTeamById(req, res, next) {
+    try {
+      const teamID = req.params.id;
+      const team = await teamModel.findOne({ _id: teamID });
+      if (!team) throw { status: 404, message: "تیمی یافت نشد" };
+
+      const result = await teamModel.deleteOne({ _id: teamID });
+      if (result.deletedCount == 0) throw { status: 500, message: "حذف تیم انجام نشد لطفا مجددا تلاش کنید" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "حذف تیم با موفقیت انجام شد",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   updateTeam() {}
   removeUserFromTeam() {}
 }
