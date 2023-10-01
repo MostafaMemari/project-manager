@@ -17,6 +17,7 @@ router.post(
   UserController.uploadProfileImage
 );
 router.get("/requests", checkLogin, UserController.getAllRequest);
+router.get("/requests/:status", checkLogin, UserController.getRequestsByStatus);
 
 module.exports = {
   userRoutes: router,

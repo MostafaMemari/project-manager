@@ -16,3 +16,7 @@ content-type: application/json
 GET http://localhost:3000/user/requests
 Authorization: Bearer {{$dotenv TOKENALI}}
 content-type: application/json
+### get user By status
+GET http://localhost:3000/user/requests/pending
+Authorization: Bearer {{$dotenv TOKENALI}}
+content-type: application/json

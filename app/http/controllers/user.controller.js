@@ -66,6 +66,39 @@ class UserController {
       next(error);
     }
   }
+  async getRequestsByStatus(req, res, next) {
+    try {
+      const { status } = req.params;
+      const userID = req.user._id;
+      const requests = await userModel.aggregate([
+        {
+          $match: { _id: userID },
+        },
+        {
+          $project: {
+            invitRequest: 1,
+            _id: 0,
+            invitRequest: {
+              $filter: {
+                input: "$invitRequest",
+                as: "request",
+                cond: {
+                  $eq: ["$$request.status", status],
+                },
+              },
+            },
+          },
+        },
+      ]);
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        request: requests?.[0]?.invitRequest || [],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 
   addSkills() {}
   editSkills() {}

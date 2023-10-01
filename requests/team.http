@@ -25,6 +25,6 @@ DELETE  http://localhost:3000/team/remove/651976db476da248338af316
 Authorization: Bearer {{$dotenv TOKEN}}
 Content-Type: application/json
 ### invite user to team
-GET  http://localhost:3000/team/invite/65196f74dacd2a9509b1aa82/MostafaMemari
+GET  http://localhost:3000/team/invite/65196f74dacd2a9509b1aa82/AliNazari
 Authorization: Bearer {{$dotenv TOKEN}}
 Content-Type: application/json
