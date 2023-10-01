@@ -10,10 +10,22 @@ Content-Type: application/json
 ### get project by ID
 GET http://localhost:3000/project/list
 Authorization: Bearer {{$dotenv TOKEN}}
+
 ### get project By ID
 GET http://localhost:3000/project/65185deb32355a2fa415706a
 Authorization: Bearer {{$dotenv TOKEN}}
+
 ### delete porject by ID
 DELETE  http://localhost:3000/project/remove/651927c2a3f89f152a0c868a
 Authorization: Bearer {{$dotenv TOKEN}}
-### remove Project
+
+### update Project By ID
+PUT  http://localhost:3000/project/edit/65185e1432355a2fa415706d
+Authorization: Bearer {{$dotenv TOKEN}}
+Content-Type: application/json
+
+{
+  "title" : "پروژه جدیده بله که جدیده خوبی سولی",
+  "text" : "عاره خوبم سولی تو چطوری این متن منه فالو نمیکنه ولی فنه",  
+  "tags" : ["سلامممم" , "علیک سلامممممم"]
+}
