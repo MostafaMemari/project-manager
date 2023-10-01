@@ -55,6 +55,18 @@ class UserController {
       next(error);
     }
   }
+  async getAllRequest(req, res, next) {
+    try {
+      const userID = req.user._id;
+      const { invitRequest } = await userModel.findById(userID, { invitRequest: 1 });
+      return res.json({
+        request: invitRequest || [],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   addSkills() {}
   editSkills() {}
   acceptInviteInTeam() {}

@@ -1,3 +1,4 @@
+const userController = require("../http/controllers/user.controller");
 const { UserController } = require("../http/controllers/user.controller");
 const { checkLogin } = require("../http/middlewares/autoLogin");
 const { expressValidatorMapper } = require("../http/middlewares/checkErrors");
@@ -15,6 +16,7 @@ router.post(
   expressValidatorMapper,
   UserController.uploadProfileImage
 );
+router.get("/requests", checkLogin, UserController.getAllRequest);
 
 module.exports = {
   userRoutes: router,
