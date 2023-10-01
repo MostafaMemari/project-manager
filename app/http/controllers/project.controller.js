@@ -1,6 +1,15 @@
 const { projectModel } = require("../../models/project");
-
+const autoBind = require("auto-bind");
 class ProjectController {
+  constructor() {
+    autoBind(this);
+  }
+  async findProject(projectID, owner) {
+    const project = await projectModel.findOne({ owner, _id: projectID });
+    if (!project) throw { status: 404, message: "پروژه یافت نشد" };
+
+    return project;
+  }
   async createProject(req, res, next) {
     try {
       const { title, text, image, tags } = req.body;
@@ -30,11 +39,56 @@ class ProjectController {
       next(error);
     }
   }
-  getProjectById() {}
-  getAllProjectOfTeam() {}
-  getProjectOfUser() {}
-  updateProject() {}
-  removeProject() {}
+  async getProjectById(req, res, next) {
+    try {
+      const owner = req.user._id;
+      const projectID = req.params.id;
+      const project = await this.findProject(projectID, owner);
+
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        project,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getAllProjectOfTeam(req, res, next) {
+    try {
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getProjectOfUser(req, res, next) {
+    try {
+    } catch (error) {
+      next(error);
+    }
+  }
+  async updateProject(req, res, next) {
+    try {
+    } catch (error) {
+      next(error);
+    }
+  }
+  async removeProject(req, res, next) {
+    try {
+      const owner = req.user._id;
+      const projectID = req.params.id;
+      const project = await this.findProject(projectID, owner);
+      const deleteProjectResult = await projectModel.deleteOne({ _id: projectID });
+      if (deleteProjectResult.deletedCount == 0) throw { status: 400, message: "پروژه حذف نشد" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "پروژه با موفقیت حذف شد",
+        project,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = {

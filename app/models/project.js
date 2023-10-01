@@ -13,6 +13,6 @@ const projectSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-const projectModel = mongoose.model("team", projectSchema);
+const projectModel = mongoose.model("project", projectSchema);
 
 module.exports = { projectModel };
