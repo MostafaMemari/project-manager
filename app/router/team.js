@@ -9,8 +9,9 @@ const router = require("express").Router();
 router.post("/create", checkLogin, createTeamValidator(), expressValidatorMapper, TeamController.createTeam);
 router.get("/list", checkLogin, TeamController.getListOfTeams);
 router.get("/me", checkLogin, TeamController.getMyTeams);
+router.get("/invite/:teamID/:username", checkLogin, TeamController.inviteUserToTeam);
 router.get("/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, TeamController.getTeamByID);
-router.get("/remove/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, TeamController.removeTeamById);
+router.delete("/remove/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, TeamController.removeTeamById);
 
 module.exports = {
   teamRoutes: router,

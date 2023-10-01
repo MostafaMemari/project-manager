@@ -1,6 +1,11 @@
+const autoBind = require("auto-bind");
 const { teamModel } = require("../../models/team");
+const { userModel } = require("../../models/users");
 
 class TeamController {
+  constructor() {
+    autoBind(this);
+  }
   async createTeam(req, res, next) {
     try {
       const { name, description, username } = req.body;
@@ -56,7 +61,6 @@ class TeamController {
       next(error);
     }
   }
-  inviteUserToTeam() {}
   async removeTeamById(req, res, next) {
     try {
       const teamID = req.params.id;
@@ -74,6 +78,41 @@ class TeamController {
       next(error);
     }
   }
+  async findUserInTeam(teamID, userID) {
+    const result = await teamModel.findOne({
+      $or: [{ owner: userID }, { users: userID }],
+      _id: teamID,
+    });
+    return !!result;
+  }
+  async inviteUserToTeam(req, res, next) {
+    try {
+      const { username, teamID } = req.params;
+      const userID = req.user._id;
+      const team = await this.findUserInTeam(teamID, userID);
+
+      if (!team) throw { status: 400, message: "تیمی جهت دعوت کردن افراد یافت نشد" };
+      const user = await userModel.findOne({ username });
+      if (!user) throw { status: 400, message: "کاربری مورد نظر جهت دعوت به تیم یافت نشد !!!" };
+
+      const userInvited = await this.findUserInTeam(teamID, user._id);
+      if (userInvited) throw { status: 400, message: "کاربر مورد نظر قبلا به تیم دعوت شده است" };
+
+      const request = {
+        caller: req.user.username,
+        requestDate: new Date(),
+        teamID,
+        status: "pending",
+      };
+
+      const updateUserResult = await userModel.updateOne({ username }, { $push: { invitRequest: request } });
+      if (updateUserResult.modifiedCount == 0) throw { status: 500, message: "ثبت درخواست دعوت با خطا مواجه شد" };
+      return res.status(201).json({ status: 200, message: "ثبت درخواست با موفقیت ایجاد شد !!", success: true });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   updateTeam() {}
   removeUserFromTeam() {}
 }

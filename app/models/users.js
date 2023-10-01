@@ -1,4 +1,15 @@
 const mongoose = require("mongoose");
+const inviteSchema = new mongoose.Schema({
+  teamID: { type: mongoose.Types.ObjectId, required: true },
+  caller: { type: String, required: true, lowercase: true },
+  requestDate: { type: Date, default: new Date() },
+  // status: { type: String, default: "pending" }, // pending , accepted , rejected
+  status: {
+    type: String,
+    enum: ["accepted", "pending", "rejected"],
+    default: "pending",
+  },
+});
 const userSchema = new mongoose.Schema(
   {
     first_name: { type: String },
@@ -12,6 +23,7 @@ const userSchema = new mongoose.Schema(
     skills: { type: [String], default: [] },
     teams: { type: [mongoose.Types.ObjectId], default: [] },
     token: { type: String, default: "" },
+    invitRequest: { type: [inviteSchema] },
   },
   {
     timestamps: true,
