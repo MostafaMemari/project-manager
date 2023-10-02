@@ -58,9 +58,24 @@ class UserController {
   async getAllRequest(req, res, next) {
     try {
       const userID = req.user._id;
-      const { invitRequest } = await userModel.findById(userID, { invitRequest: 1 });
+      const invitRequest = await userModel.aggregate([
+        {
+          $match: {
+            _id: userID,
+          },
+        },
+
+        {
+          $lookup: {
+            from: "users",
+            localField: "invitRequest.caller",
+            foreignField: "username",
+            as: "invitRequest.callerinfo",
+          },
+        },
+      ]);
       return res.json({
-        request: invitRequest || [],
+        request: invitRequest,
       });
     } catch (error) {
       next(error);
