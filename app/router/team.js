@@ -10,6 +10,7 @@ router.post("/create", checkLogin, createTeamValidator(), expressValidatorMapper
 router.get("/list", checkLogin, TeamController.getListOfTeams);
 router.get("/me", checkLogin, TeamController.getMyTeams);
 router.get("/invite/:teamID/:username", checkLogin, TeamController.inviteUserToTeam);
+router.put("/update/:teamID", checkLogin, TeamController.updateTeam);
 router.get("/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, TeamController.getTeamByID);
 router.delete("/remove/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, TeamController.removeTeamById);
 

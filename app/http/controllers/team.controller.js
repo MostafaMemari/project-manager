@@ -53,9 +53,32 @@ class TeamController {
   async getMyTeams(req, res, next) {
     try {
       const userID = req.user._id;
-      const teams = await teamModel.find({
-        $or: [{ owner: userID }, { users: userID }],
-      });
+
+      const teams = await teamModel.aggregate([
+        {
+          $match: {
+            $or: [{ owner: userID }, { users: userID }],
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "owner",
+          },
+        },
+        {
+          $project: {
+            "owner.username": 1,
+            "owner.mobile": 1,
+            "owner.email": 1,
+          },
+        },
+        {
+          $unwind: "$owner",
+        },
+      ]);
       return res.status(200).json({ status: 200, success: true, teams });
     } catch (error) {
       next(error);
@@ -113,7 +136,29 @@ class TeamController {
     }
   }
 
-  updateTeam() {}
+  async updateTeam(req, res, next) {
+    try {
+      // const {name , description} = req.body
+      const data = { ...req.body };
+      Object.keys(data).forEach((key) => {
+        if (!data[key]) delete data[key];
+        if (["", " ", undefined, null, NaN].includes(data[key])) delete data[key];
+      });
+      const userID = req.user._id;
+      const { teamID } = req.params;
+      const team = await teamModel.findOne({ owner: userID._id, _id: teamID });
+      if (!team) throw { status: 404, message: "تیمی با این مشخصات یافت نشد" };
+      const teamEditResult = await teamModel.updateOne({ _id: teamID }, { $set: data });
+      if (teamEditResult.modifiedCount == 0) throw { status: 500, message: "بروزرسانی مشخصات تیم انجام نشد" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "به روزرسانی با موفقیت انجام شد",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   removeUserFromTeam() {}
 }
 module.exports = {

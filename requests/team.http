@@ -28,3 +28,13 @@ Content-Type: application/json
 GET  http://localhost:3000/team/invite/65196f74dacd2a9509b1aa82/AliNazari
 Authorization: Bearer {{$dotenv TOKEN}}
 Content-Type: application/json
+### edit team By id
+PUT   http://localhost:3000/team/update/65196f74dacd2a9509b1aa82
+Authorization: Bearer {{$dotenv TOKEN}}
+Content-Type: application/json
+
+{
+  "name" : "MostafaTeam" , 
+  "description"  : "best developer team mosi" , 
+  "tags" : ["",""]
+}
