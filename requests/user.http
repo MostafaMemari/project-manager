@@ -20,3 +20,7 @@ content-type: application/json
 GET http://localhost:3000/user/requests/pending
 Authorization: Bearer {{$dotenv TOKENALI}}
 content-type: application/json
+### Accepted Request
+GET http://localhost:3000/user/change-status-request/6519adb3b20e3fb1100e76f7/rejected
+Authorization: Bearer {{$dotenv TOKENALI}}
+content-type: application/json

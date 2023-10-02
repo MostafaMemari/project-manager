@@ -18,6 +18,7 @@ router.post(
 );
 router.get("/requests", checkLogin, UserController.getAllRequest);
 router.get("/requests/:status", checkLogin, UserController.getRequestsByStatus);
+router.get("/change-status-request/:id/:status", checkLogin, UserController.changeStatusRequest);
 
 module.exports = {
   userRoutes: router,

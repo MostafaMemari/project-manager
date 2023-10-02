@@ -102,7 +102,31 @@ class UserController {
 
   addSkills() {}
   editSkills() {}
-  acceptInviteInTeam() {}
+  async changeStatusRequest(req, res, next) {
+    try {
+      const { id, status } = req.params;
+      const request = await userModel.findOne({ "invitRequest._id": id });
+
+      if (!request) throw { status: 404, message: "درخواستی با این مشخصات یافت نشد" };
+      const findRequest = request.invitRequest.find((item) => item.id == id);
+      if (findRequest.status !== "pending") throw { status: 400, message: "این درخواست قبلا رد یا پذیرفته شده است" };
+      if (!["accepted", "rejected"].includes(status)) throw { status: 400, message: "اطلاعات وارد شده صحیح نمی باشد" };
+      const updateResult = await userModel.updateOne(
+        { "invitRequest._id": id },
+        {
+          $set: { "invitRequest.$.status": status },
+        }
+      );
+      if (updateResult.modifiedCount == 0) throw { status: 500, message: "تغییر وضعیت درخواست انجام نشد" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "تغییر وضعیت درخواست با موفقیت انجام شد",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   rejectInviteInTean() {}
 }
 module.exports = {
